@@ -1,0 +1,20 @@
+Codeconz 2024
+Lighthouses AI Contest - From Euskal Encounter 21
+
+Autor: marcan <marcan@euskalencounter.org>
+Licencia: GPLv2/v3
+Adapted for Lighthouses Codeconz 2024
+
+Requirements:
+```
+	Python v3.x
+	Install requirements listed in sandbox/requirements.txt
+```
+
+Considerations:
+This version of the game is a one-process version where the bots actions are executed sequentially one by one, without subprocesses communication. The goal of this version is to execute the game easily to collect as many data as possible to implement AI bots.
+
+For modifying the game specifications, the map and the number/class of bots can be modified within the main function of sandbox/main.py file.
+
+Usage:
+$ python3.x sandbox/main.py
