@@ -10,16 +10,13 @@ def is_valid(x, y, grid, visited):
     return 0 <= x < cols and 0 <= y < rows and grid[y][x] == 1 and not visited[y][x]
 
 
-def find_path(grid, energy_per_turn_grid, current_energy_grid, start, end):
-    """
-    Find the shortest path in the grid from start to end.
-    :param grid: 2D list representing the map (0: water, 1: soil)
-    :param start: Tuple (y, x) for the start position
-    :param end: Tuple (y, x) for the end position
-    :return: List of tuples representing the path, or empty list if no path exists
-    """
+def find_path(grid: list[list[int]],
+              energy_per_turn_grid: list[list[int]],
+              current_energy_grid: list[list[int]],
+              start: tuple[int, int],
+              end: tuple[int, int]) -> tuple[list[tuple[int, int]], int]:
     if not grid or not grid[0]:
-        return []
+        return [], 0
 
     # Directions for vertical, horizontal, and diagonal movements
     directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
@@ -61,7 +58,7 @@ def find_path(grid, energy_per_turn_grid, current_energy_grid, start, end):
                 if current_energy_grid[new_y][new_x]:
                     new_reward = reward + min(100,
                                               current_energy_grid[new_y][new_x] + energy_per_turn_grid[new_y][new_x] * (
-                                                          len(path) - 1))
+                                                      len(path) - 1))
                 else:
                     new_reward = reward + min(100, energy_per_turn_grid[new_y][new_x] * (len(path) - 1))
                 queue.append(((new_x, new_y), path + [(new_x, new_y)], new_reward))
