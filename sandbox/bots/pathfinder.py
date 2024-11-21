@@ -10,7 +10,7 @@ def is_valid(x, y, grid, visited):
     return 0 <= x < cols and 0 <= y < rows and grid[y][x] == 1 and not visited[y][x]
 
 
-def find_path(grid, energy_map, start, end):
+def find_path(grid, energy_per_turn_grid, current_energy_grid, start, end):
     """
     Find the shortest path in the grid from start to end.
     :param grid: 2D list representing the map (0: water, 1: soil)
@@ -29,7 +29,7 @@ def find_path(grid, energy_map, start, end):
     visited = [[False for _ in range(cols)] for _ in range(rows)]
 
     # Queue for BFS: stores (current_position, path_to_current_position)
-    queue = deque([(start, [start], energy_map[start[1]][start[0]])])
+    queue = deque([(start, [start], energy_per_turn_grid[start[1]][start[0]])])
     visited[start[1]][start[0]] = True
 
     # Variables to track the best path and reward at the shortest length
@@ -58,7 +58,12 @@ def find_path(grid, energy_map, start, end):
 
             if is_valid(new_x, new_y, grid, visited):
                 visited[new_y][new_x] = True
-                new_reward = reward + min(100, energy_map[new_y][new_x]*len(path))
+                if current_energy_grid[new_y][new_x]:
+                    new_reward = reward + min(100,
+                                              current_energy_grid[new_y][new_x] + energy_per_turn_grid[new_y][new_x] * (
+                                                          len(path) - 1))
+                else:
+                    new_reward = reward + min(100, energy_per_turn_grid[new_y][new_x] * (len(path) - 1))
                 queue.append(((new_x, new_y), path + [(new_x, new_y)], new_reward))
 
     # If no path is found, return an empty list
